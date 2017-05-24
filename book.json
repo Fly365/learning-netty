@@ -22,7 +22,7 @@
   ],
   "pluginsConfig": {
     "edit-link": {
-        "base": "https://github.com/skyao/leaning-netty/edit/master",
+        "base": "https://github.com/skyao/learning-netty/edit/master",
         "label": "Edit"
     }
   },
