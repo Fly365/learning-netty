@@ -18,7 +18,7 @@ implements Cloneable {}
 
 ## 成员变量
 
-### group
+### group属性
 
 ```java
 volatile EventLoopGroup group;
@@ -39,11 +39,11 @@ public EventLoopGroup group() {
 }
 ```
 
-注意this.group只能设置一次, 这意味着group()方法只能被调用一次.
+注意this.group只能设置一次, 这意味着group(group)方法只能被调用一次.
 
-## localAddress
+### localAddress属性
 
-localAddress用于绑定本地终端/end, 有多个设值的方法:
+localAddress用于绑定本地终端, 有多个设值的方法:
 
 ```java
 private volatile SocketAddress localAddress;
@@ -72,7 +72,7 @@ final SocketAddress localAddress() {
 
 这些重载的localAddress(), 最终都指向了InetSocketAddress的几个构造函数.
 
-## options
+### options属性
 
 options属性是一个LinkedHashMap, option()方法用于设置单个的key/value, 如果value为null则删除该key.
 
@@ -100,7 +100,7 @@ final Map<ChannelOption<?>, Object> options() {
 }
 ```
 
-## attrs
+### attrs属性
 
 attrs和options属性类似.
 
@@ -128,7 +128,7 @@ final Map<AttributeKey<?>, Object> attrs() {
 }
 ```
 
-## handler
+### handler
 
 
 ```java
@@ -147,7 +147,7 @@ final ChannelHandler handler() {
 }
 ```
 
-## channelFactory
+### channelFactory属性
 
 channelFactory这个属性有点麻烦, 根源在于ChannelFactory这个类:
 
