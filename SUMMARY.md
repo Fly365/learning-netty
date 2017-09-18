@@ -1,6 +1,6 @@
 # Summary
 
-* [Bootstrap](bootstrap/bootstrap.md)
+* [Bootstrap](bootstrap/index.md)
 	* [类AbstractBootstrap](bootstrap/class_AbstractBootstrap.md)
 	* [类Bootstrap](bootstrap/class_Bootstrap.md)
 	* [类ServerBootstrap](bootstrap/class_ServerBootstrap.md)

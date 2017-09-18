@@ -1,19 +1,24 @@
-类AbstractBootstrap
-=================
+# 类AbstractBootstrap
 
-# 类定义
+## 类定义
 
 AbstractBootstrap是Bootstrap的基类, 类定义如下:
 
 ```java
-public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C extends Channel> implements Cloneable {}
+package io.netty.bootstrap;
+
+public abstract class AbstractBootstrap
+<B extends AbstractBootstrap<B, C>, C extends Channel> 
+implements Cloneable {}
 ```
 
 类定义中的泛型B要求是AbstractBootstrap的子类, 而泛型C要求是Channel的子类.
 
-# 成员变量
+注意这里的泛型的用法，非常的巧妙。
 
-## group
+## 成员变量
+
+### group
 
 ```java
 volatile EventLoopGroup group;
