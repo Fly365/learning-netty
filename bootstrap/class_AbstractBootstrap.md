@@ -34,7 +34,7 @@ public B group(EventLoopGroup group) {
     return (B) this;
 }
 
-public EventLoopGroup group() {
+public EventLooattrspGroup group() {
     return group;
 }
 ```
@@ -128,7 +128,7 @@ final Map<AttributeKey<?>, Object> attrs() {
 }
 ```
 
-### handler
+### handler属性
 
 
 ```java
@@ -149,35 +149,12 @@ final ChannelHandler handler() {
 
 ### channelFactory属性
 
-channelFactory这个属性有点麻烦, 根源在于ChannelFactory这个类:
+#### 新旧两个ChannelFactory
 
-- 原来在package io.netty.bootstrap中, 明显这个packge名不适合, 所以这个io.netty.bootstrap.ChannelFactory已经被标记为"@Deprecated".
+channelFactory这个属性有点麻烦, 根源在于ChannelFactory这个类，netty中有新旧两个ChannelFactory，具体介绍见 [Channel Factory](../channel/channel_factory.md)
 
-    ```java
-    package io.netty.bootstrap;
 
-    @Deprecated
-    public interface ChannelFactory<T extends Channel> {
-    /**
-     * Creates a new channel.
-     */
-    T newChannel();
-    }
-    ```
-
-- 现在要求使用packge io.netty.channel下的ChannelFactory类, 这个新类的定义有点奇怪, 是从旧的ChannelFactory下继承:
-
-    ```java
-    package io.netty.channel;
-
-    public interface ChannelFactory<T extends Channel> extends io.netty.bootstrap.ChannelFactory<T> {
-        /**
-         * Creates a new channel.
-         */
-        @Override
-        T newChannel();
-    }
-    ```
+#### 混合使用
 
 但是现在的情况是内部已经转为使用新类, 对外的接口还是继续保持使用原来的旧类, 因此代码有些混乱:
 
@@ -192,9 +169,8 @@ final ChannelFactory< ? extends C> channelFactory() {
     return channelFactory;
 }
 
-// 这个方法已经被标志为"unchecked"
+// 这个方法的参数是旧的"io.netty.bootstrap.ChannelFactory",已经被标志为"@Deprecated"，尽量用下面的方法
 @Deprecated
-@SuppressWarnings("unchecked")
 public B channelFactory(ChannelFactory< ? extends C> channelFactory) {
     if (channelFactory == null) {
         throw new NullPointerException("channelFactory");
@@ -207,16 +183,16 @@ public B channelFactory(ChannelFactory< ? extends C> channelFactory) {
     return (B) this;
 }
 
-
-// 这个方法是现在推荐使用的设置channelFactory的方法, 使用新类
-// 但是底层的实现还是调用回上面被废弃的channelFactory()方法
+// 这个方法是现在推荐使用的设置channelFactory的方法, 使用新类"io.netty.channel.ChannelFactory"
 @SuppressWarnings({ "unchecked", "deprecation" })
 public B channelFactory(io.netty.channel.ChannelFactory< ? extends C> channelFactory) {
+	// 但是底层的实现还是调用回上面被废弃的channelFactory()方法
+    // 因为新类是继承自旧类的，所有只要简单转一下类型就好
     return channelFactory((ChannelFactory<C>) channelFactory);
 }
 ```
 
-注: 还有一个channel()方法可以非常方便的设置channelFactory:
+此外还有一个channel()方法可以非常方便的设置channelFactory:
 
 ```java
 public B channel(Class< ? extends C> channelClass) {
@@ -227,16 +203,9 @@ public B channel(Class< ? extends C> channelClass) {
 }
 ```
 
-使用例子如下(这个方法反而是最常用的):
+## 类方法
 
-```java
-ServerBootstrap b = new ServerBootstrap();
-b.channel(NioServerSocketChannel.class);
-```
-
-# 方法
-
-## validate()
+### validate()
 
 validate()用于检验所有的参数, 实际代码中检查的是group和channelFactory两个参数, 这两个参数必须设置不能为空:
 
@@ -252,7 +221,7 @@ public B validate() {
 }
 ```
 
-## register()
+### register()
 
 register()方法创建一个新的Channel并将它注册到EventLoop, 在执行前会调用validate()方法做前置检查:
 
@@ -281,7 +250,7 @@ final ChannelFuture initAndRegister() {
 
 	// 创建成功则将这个channel注册到eventloop中
     ChannelFuture regFuture = group().register(channel);
-    // 如果出错了
+    // 如果注册出错
     if (regFuture.cause() != null) {
     	// 判断是否已经注册
         if (channel.isRegistered()) {
@@ -311,13 +280,13 @@ final ChannelFuture initAndRegister() {
 abstract void init(Channel channel) throws Exception;
 ```
 
-## bind()
+### bind()
 
 bind()方法有多个重载, 差异只是bind操作所需的InetSocketAddress参数从何而来而已:
 
-1. 从属性this.localAddress来
+1. 从属性`this.localAddress`来
 
-	这个时候bind()方法无需参数, 直接使用属性this.localAddress, 当前调用之前this.localAddress必须有赋值(通过函数localAddress()):
+	这个时候bind()方法无需参数, 直接使用属性this.localAddress, 当前调用之前`this.localAddress`必须有赋值(通过函数localAddress()):
 
     ```java
     public ChannelFuture bind() {
@@ -366,13 +335,11 @@ bind()方法有多个重载, 差异只是bind操作所需的InetSocketAddress参
 
 ```java
 private ChannelFuture doBind(final SocketAddress localAddress) {
-	// 调用initAndRegister()方法, 先初始化channel,并注册到event loop, 细节前面看过了
+	// 调用initAndRegister()方法, 先初始化channel,并注册到event loop
     final ChannelFuture regFuture = initAndRegister();
-    // 获取注册的channel
     final Channel channel = regFuture.channel();
-    // 检查注册是否出错
+    // 检查注册的channel是否出错
     if (regFuture.cause() != null) {
-    	// 如果出错了直接返回
         return regFuture;
     }
 
@@ -396,7 +363,7 @@ private ChannelFuture doBind(final SocketAddress localAddress) {
                 Throwable cause = future.cause();
                 // 检查是否出错
                 if (cause != null) {
-                    // Registration on the EventLoop failed so fail the ChannelPromise directly to not cause an 在event loop上注册失败, 因此直接让ChannelPromise失败, 避免一旦我们试图访问这个channel的eventloop导致IllegalStateException
+                    // 在event loop上注册失败, 因此直接让ChannelPromise失败, 避免一旦我们试图访问这个channel的eventloop导致IllegalStateException
                     promise.setFailure(cause);
                 } else {
                 	// 注册已经成功, 因此设置正确的executor以便使用
@@ -419,7 +386,7 @@ private ChannelFuture doBind(final SocketAddress localAddress) {
 private static void doBind0(final ChannelFuture regFuture, final Channel channel, final SocketAddress localAddress, final ChannelPromise promise) {
 
     // 这个方法在channelRegistered()方法触发前被调用.
-    // 让handleer有机会在它的channelRegistered()实现中构建pipeline
+    // 让handler有机会在它的channelRegistered()实现中构建pipeline
     // 给channel的event loop增加一个一次性任务
     channel.eventLoop().execute(new OneTimeTask() {
         @Override
@@ -436,14 +403,3 @@ private static void doBind0(final ChannelFuture regFuture, final Channel channel
     });
 }
 ```
-
-
-
-
-
-
-
-
-
-
-

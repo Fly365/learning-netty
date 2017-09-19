@@ -1,17 +1,20 @@
-类Bootstrap
-=================
+# 类Bootstrap
 
 类Bootstrap用于帮助客户端引导Channel.
 
-# 类定义
+bind()方法用于无连接传输如datagram (UDP)。对于常规TCP链接，用connect()方法。
+
+## 类定义
 
 ```java
+package io.netty.bootstrap;
+
 public class Bootstrap extends AbstractBootstrap<Bootstrap, Channel> {}
 ```
 
-# 类属性
+## 类成员
 
-## resolver
+### resolver属性
 
 resolver默认设置为DefaultAddressResolverGroup.INSTANCE, 可以通过resolver()方法来赋值:
 
@@ -28,9 +31,9 @@ public Bootstrap resolver(AddressResolverGroup< ? > resolver) {
 }
 ```
 
-## remoteAddress
+### remoteAddress属性
 
-remoteAddress可以通过remoteAddress()方法赋值, 有多个装载:
+remoteAddress可以通过remoteAddress()方法赋值, 有多个重载方法:
 
 ```java
 private volatile SocketAddress remoteAddress;
@@ -49,9 +52,9 @@ public Bootstrap remoteAddress(InetAddress inetHost, int inetPort) {
 }
 ```
 
-# 类方法
+## 类方法
 
-## validate()方法
+### validate()方法
 
 重写了validate()方法, 在调用AbstractBootstrap的validate()方法(检查group和channelFactory)外, 增加了对handler的检查:
 
@@ -66,26 +69,9 @@ public Bootstrap validate() {
 }
 ```
 
-## connect()方法
+### connect()方法
 
 有多个connect()方法重载, 功能都是一样, 拿到输入的remoteAddress然后调用doResolveAndConnect()方法:
-
-```java
-public ChannelFuture connect() {
-	// 先做前置检查
-    validate();
-    // 检查remoteAddress, 确认已经赋值
-    SocketAddress remoteAddress = this.remoteAddress;
-    if (remoteAddress == null) {
-        throw new IllegalStateException("remoteAddress not set");
-    }
-
-	// 调用doResolveAndConnect()方法
-    return doResolveAndConnect(remoteAddress, localAddress());
-}
-```
-
-看doResolveAndConnect()方法:
 
 ```java
 private ChannelFuture doResolveAndConnect(SocketAddress remoteAddress, final SocketAddress localAddress) {
@@ -194,7 +180,7 @@ private static void doConnect0(
 }
 ```
 
-## init(channel)方法
+### init(channel)方法
 
 前面看基类AbstractBootstrap时看到过, 这个init()方法是一个模板方法, 需要子类做具体实现.
 
@@ -235,6 +221,18 @@ void init(Channel channel) throws Exception {
 
 总结上在init()方法中, Bootstrap只做了一个事情: **将Bootstrap中保存的信息(handle/options/attrs)设置到新创建的channel**.
 
+### clone()
 
+深度克隆当前Bootstrap对象，有完全一样的配置，但是使用给定的EventLoopGroup。
+
+这个方法适合用相同配置创建多个Channel。
+
+```java
+public Bootstrap clone(EventLoopGroup group) {
+        Bootstrap bs = new Bootstrap(this);
+        bs.group = group;
+        return bs;
+    }
+```
 
 

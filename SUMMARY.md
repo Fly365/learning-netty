@@ -17,6 +17,7 @@
 * [Channel](channel/channel.md)
 	* [接口Channel](channel/interface_Channel.md)
 		* [类AbstractChannel](channel/class_AbstractChannel.md)
+	* [Channel Factory](channel/channel_factory.md)
 	* [Channel Unsafe](channel/interface_Unsafe.md)
 	* [Channel Handler](channel/channel_handler.md)
 		* [ChannelHandler相关接口](channel/interface_ChannelHandler.md)

@@ -1,19 +1,18 @@
-类ServerBootstrap
-=================
+# 类ServerBootstrap
 
 类ServerBootstrap用于帮助服务器端引导ServerChannel.
 
 ServerBootstrap除了处理ServerChannel外, 还需要处理从ServerChannel下创建的Channel.Netty中称这两个关系为parent和child.
 
-# 类定义
+## 类定义
 
 ```java
 public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerChannel> {}
 ```
 
-# 类属性
+## 类属性
 
-## childGroup
+### childGroup属性
 
 childGroup属性用于指定处理客户端连接的EventLoopGroup, 设置的方式有两种:
 
@@ -43,7 +42,7 @@ public EventLoopGroup childGroup() {
 }
 ```
 
-## childOptions/childAttrs/childHandler
+### childOptions/childAttrs/childHandler属性
 
 这三个属性和parent的基本对应, 设值方法和检验都是一模一样的:
 
@@ -55,9 +54,9 @@ private final Map<AttributeKey<?>, Object> childAttrs = new LinkedHashMap<Attrib
 private volatile ChannelHandler childHandler;
 ```
 
-# 类方法
+## 类方法
 
-## init(channel)方法
+### init()方法
 
 ServerBootstrap的init(channel)方法相比Bootstrap的要复杂一些, 除了设置options/attrs/handler到channel外, 还需要为child设置childGroup, childHandler, childOptions, childAttrs:
 
