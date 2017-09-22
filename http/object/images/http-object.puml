@@ -1,0 +1,38 @@
+@startuml
+
+interface DecoderResultProvider{
++ decoderResult()
+}
+interface ByteBufHolder{
++ content()
++ copy()
++ duplicate()
++ retain()
++ touch()
+}
+interface HttpObject{
+}
+interface HttpMessage{
++ protocolVersion()
++ headers()
+}
+interface HttpContent {
+}
+interface HttpRequest{
++ method()
++ uri()
+}
+interface HttpResponse{
+}
+interface LastHttpContent {
+}
+
+DecoderResultProvider           <|--          HttpObject
+HttpObject                      <|--          HttpMessage
+HttpMessage                      <|--          HttpRequest
+HttpMessage                      <|--          HttpResponse
+HttpObject                      <|--          HttpContent
+ByteBufHolder                      <|--          HttpContent
+HttpContent                     <|--          LastHttpContent
+
+@enduml
