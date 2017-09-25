@@ -1,42 +1,34 @@
 @startuml
 
-interface DecoderResultProvider{
-+ decoderResult()
-}
-interface HttpObject{
-}
+
 interface HttpMessage{
 + protocolVersion()
 + headers()
 }
-interface HttpContent {
-}
+
 interface HttpRequest{
 + method()
 + uri()
 }
+interface FullHttpMessage {
+}
 interface HttpResponse{
++ status()
 }
-interface FullHttpMessage{
-}
-interface FullHttpRequest{
-}
-interface FullHttpResponse{
-}
-
-
 interface LastHttpContent {
++ trailingHeaders()
+}
+
+
+interface FullHttpRequest {
+}
+interface FullHttpResponse {
 }
 
 
 
-DecoderResultProvider           <|--          HttpObject
-HttpObject                      <|--          HttpMessage
 HttpMessage                      <|--          HttpRequest
 HttpMessage                      <|--          HttpResponse
-HttpObject                      <|--          HttpContent
-HttpContent                     <|--          LastHttpContent
-
 
 
 HttpMessage                     <|--          FullHttpMessage

@@ -1,0 +1,32 @@
+@startuml
+
+
+interface Headers{
+}
+interface HttpHeaders{
++ getAsString()
++ getAllAsString()
++ iteratorAsString()
++ contains()
+}
+class DefaultHeaders{
+}
+class EmptyHeaders{
+}
+class DefaultHttpHeaders{
+}
+class EmptyHttpHeaders{
+}
+class CombinedHttpHeaders{
+}
+
+
+
+Headers                      <|--          HttpHeaders
+DefaultHeaders                      <|--          DefaultHttpHeaders
+HttpHeaders                      <|--          DefaultHttpHeaders
+EmptyHeaders                      <|--          EmptyHttpHeaders
+HttpHeaders                      <|--          EmptyHttpHeaders
+DefaultHttpHeaders                      <|--          CombinedHttpHeaders
+
+@enduml

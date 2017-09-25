@@ -23,8 +23,10 @@ interface HttpRequest{
 + uri()
 }
 interface HttpResponse{
++ status()
 }
 interface LastHttpContent {
++ trailingHeaders()
 }
 
 DecoderResultProvider           <|--          HttpObject

@@ -1,0 +1,52 @@
+@startuml
+
+
+interface HttpObject{
+}
+interface HttpMessage{
+}
+interface HttpContent {
+}
+interface HttpRequest{
+}
+interface HttpResponse{
+}
+interface LastHttpContent {
+}
+class DefaultHttpObject{
+}
+class DefaultHttpMessage{
+}
+class DefaultHttpContent{
+}
+class DefaultLastHttpContent{
+}
+class DefaultHttpRequest{
+}
+class DefaultHttpResponse{
+}
+
+
+HttpObject                      <|--          HttpMessage
+HttpMessage                      <|--          HttpRequest
+HttpMessage                      <|--          HttpResponse
+HttpObject                      <|--          HttpContent
+HttpContent                     <|--          LastHttpContent
+
+
+
+
+HttpObject                      <|--          DefaultHttpObject
+DefaultHttpObject               <|--          DefaultHttpContent
+HttpContent                     <|--          DefaultHttpContent
+DefaultHttpObject               <|--          DefaultHttpMessage
+HttpMessage                     <|--          DefaultHttpMessage
+DefaultHttpContent                     <|--          DefaultLastHttpContent
+LastHttpContent                     <|--          DefaultLastHttpContent
+DefaultHttpMessage                     <|--          DefaultHttpRequest
+HttpRequest                     <|--          DefaultHttpRequest
+DefaultHttpMessage                     <|--          DefaultHttpResponse
+HttpResponse                     <|--          DefaultHttpResponse
+
+
+@enduml

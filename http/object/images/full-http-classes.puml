@@ -1,0 +1,22 @@
+@startuml
+
+class DefaultHttpResponse{
+}
+class DefaultFullHttpResponse{
+}
+class DefaultFullHttpRequest{
+}
+interface FullHttpRequest {
+}
+interface FullHttpResponse {
+}
+
+
+DefaultHttpMessage                     <|--          DefaultHttpRequest
+DefaultHttpMessage                     <|--          DefaultHttpResponse
+DefaultHttpResponse             <|--          DefaultFullHttpResponse
+FullHttpResponse                     <|--          DefaultFullHttpResponse
+DefaultHttpRequest             <|--          DefaultFullHttpRequest
+FullHttpRequest                     <|--          DefaultFullHttpRequest
+
+@enduml
