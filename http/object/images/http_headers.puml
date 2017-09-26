@@ -19,6 +19,8 @@ class EmptyHttpHeaders{
 }
 class CombinedHttpHeaders{
 }
+class TrailingHttpHeaders{
+}
 
 
 
@@ -28,5 +30,6 @@ HttpHeaders                      <|--          DefaultHttpHeaders
 EmptyHeaders                      <|--          EmptyHttpHeaders
 HttpHeaders                      <|--          EmptyHttpHeaders
 DefaultHttpHeaders                      <|--          CombinedHttpHeaders
+DefaultHttpHeaders                      <|--          TrailingHttpHeaders
 
 @enduml
